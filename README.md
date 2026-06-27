@@ -1,10 +1,10 @@
-# 🛒 Stuffsus Recommendation System
+#  Stuffsus Recommendation System
 
 Sistem Rekomendasi Produk Retail berbasis **Content-Based Filtering**, **TF-IDF**, dan **Cosine Similarity** menggunakan **Dataset Retail New York**. Model rekomendasi telah diintegrasikan ke dalam aplikasi web **Stuffsus** untuk membantu pengguna menemukan produk yang relevan berdasarkan tingkat kemiripan antarproduk.
 
 ---
 
-# 📖 Deskripsi Proyek
+# Deskripsi Proyek
 
 Stuffsus merupakan aplikasi e-commerce retail berbasis web yang dilengkapi dengan sistem rekomendasi produk. Sistem ini menggunakan pendekatan **Content-Based Filtering** dengan metode **TF-IDF (Term Frequency–Inverse Document Frequency)** dan **Cosine Similarity** untuk menghitung tingkat kemiripan antarproduk sehingga mampu memberikan rekomendasi produk yang relevan kepada pengguna.
 
@@ -12,7 +12,7 @@ Proyek ini dikembangkan sebagai **Proyek Kolaborasi Program Studi Sains Data dan
 
 ---
 
-# ✨ Fitur Utama
+#Fitur Utama
 
 - Pencarian Produk
 - Sistem Rekomendasi Produk
@@ -27,7 +27,7 @@ Proyek ini dikembangkan sebagai **Proyek Kolaborasi Program Studi Sains Data dan
 
 ---
 
-# 📊 Dataset
+#  Dataset
 
 Dataset yang digunakan adalah **Retail New York Dataset** dengan karakteristik sebagai berikut:
 
@@ -47,7 +47,7 @@ Tahapan preprocessing meliputi:
 
 ---
 
-# 🧠 Metode yang Digunakan
+# Metode yang Digunakan
 
 Metode utama yang digunakan adalah **Content-Based Filtering**, yaitu sistem rekomendasi yang memberikan rekomendasi berdasarkan tingkat kemiripan antarproduk.
 
@@ -65,7 +65,7 @@ Tahapan pengembangan model meliputi:
 
 ---
 
-# 🤖 Model Machine Learning
+#  Model Machine Learning
 
 Seluruh proses pembangunan model machine learning dilakukan pada notebook:
 
@@ -106,7 +106,7 @@ sehingga sistem dapat memberikan rekomendasi produk secara **real-time** kepada 
 
 ---
 
-# 🔄 Alur Sistem
+#  Alur Sistem
 
 ```
 Dataset Retail New York
@@ -148,7 +148,7 @@ Aplikasi Web Stuffsus
 
 ---
 
-# 📈 Hasil Evaluasi
+#  Hasil Evaluasi
 
 | Metrik | Nilai |
 |---------|-------:|
@@ -163,7 +163,7 @@ Hasil evaluasi menunjukkan bahwa sistem mampu menghasilkan rekomendasi produk ya
 
 ---
 
-# 💻 Teknologi yang Digunakan
+#  Teknologi yang Digunakan
 
 ### Bahasa Pemrograman
 
@@ -191,7 +191,7 @@ Hasil evaluasi menunjukkan bahwa sistem mampu menghasilkan rekomendasi produk ya
 
 ---
 
-# 📂 Struktur Proyek
+#  Struktur Proyek
 
 ```
 stuffsus-recommendation-system
@@ -258,7 +258,7 @@ http://127.0.0.1:5000
 
 ---
 
-# 📷 Tampilan Aplikasi
+#  Tampilan Aplikasi
 
 Aplikasi Stuffsus menyediakan beberapa fitur utama, antara lain:
 
@@ -275,7 +275,7 @@ Aplikasi Stuffsus menyediakan beberapa fitur utama, antara lain:
 
 ---
 
-# 👨‍💻 Pengembang
+# Pengembang
 
 **Nyoman Arya Kristian Penny Karna Jaya**
 
@@ -287,6 +287,6 @@ Universitas Teknologi Yogyakarta
 
 ---
 
-# 📄 Lisensi
+#  Lisensi
 
 Proyek ini dikembangkan untuk keperluan akademik sebagai bagian dari **Proyek Kolaborasi Program Studi Sains Data dan Informatika Universitas Teknologi Yogyakarta**.
