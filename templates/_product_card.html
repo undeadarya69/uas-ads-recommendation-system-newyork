@@ -1,0 +1,35 @@
+{% macro product_card(product) %}
+<div class="product-card">
+    {% if product.discount_percent > 0 %}
+    <div class="discount-tag">-{{ product.discount_percent }}%</div>
+    {% endif %}
+    <div class="card-tag">{{ product.category }}</div>
+    <div class="product-image">
+        <img src="{{ url_for('static', filename=product.image_url.lstrip('/')) }}" alt="{{ product.name }}">
+    </div>
+    <h4 class="product-title">{{ product.name }}</h4>
+    <div class="product-rating">
+        <span class="star">★</span> {{ product.rating }} <span class="reviews">({{ product.reviews }} Reviews)</span>
+    </div>
+    <div class="product-price">
+        {% if product.discount_percent > 0 %}
+        <span class="price-strike">${{ "%.2f"|format(product.price) }}</span>
+        <span class="price-final">${{ "%.2f"|format(product.final_price) }}</span>
+        {% else %}
+        ${{ "%.2f"|format(product.price) }}
+        {% endif %}
+    </div>
+    <div class="product-badges">
+        {% if product.is_new_arrival %}<span class="mini-badge badge-new">New Arrival</span>{% endif %}
+        {% if product.is_best_seller %}<span class="mini-badge badge-best">Best Seller</span>{% endif %}
+    </div>
+    <div class="product-actions">
+        <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-chart">+ Keranjang</button>
+        </form>
+        <form action="{{ url_for('buy_now', product_id=product.id) }}" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-buy">Buy Now</button>
+        </form>
+    </div>
+</div>
+{% endmacro %}

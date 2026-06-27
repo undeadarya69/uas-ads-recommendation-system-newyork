@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="main-container text-container">
+    <h2 class="section-title"><i class="fa fa-shopping-bag"></i> Keranjang Belanja Anda</h2>
+
+    {% if cart_items %}
+    <div class="cart-table-container">
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Produk</th>
+                    <th>Kategori</th>
+                    <th>Harga</th>
+                    <th>Jumlah</th>
+                    <th>Subtotal</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr>
+                    <td>
+                        <div class="cart-product-cell">
+                            <img src="{{ url_for('static', filename=item.image_url.lstrip('/')) }}" alt="{{ item.name }}" class="cart-img-thumb">>
+                            <span>{{ item.name }}</span>
+                        </div>
+                    </td>
+                    <td><span class="tag-label">{{ item.category }}</span></td>
+                    <td>
+                        {% if item.discount > 0 %}
+                        <span class="price-strike">${{ "%.2f"|format(item.original_price) }}</span><br>
+                        <strong>${{ "%.2f"|format(item.price) }}</strong>
+                        {% else %}
+                        ${{ "%.2f"|format(item.price) }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form action="{{ url_for('update_cart', product_id=item.id) }}" method="POST" style="display:flex; align-items:center; gap:6px;">
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="99" style="width:60px; padding:4px 6px; border:1px solid #ddd; border-radius:6px; text-align:center;">
+                            <button type="submit" class="btn btn-chart" style="padding:4px 10px; font-size:11px;">Update</button>
+                        </form>
+                    </td>
+                    <td>${{ "%.2f"|format(item.subtotal) }}</td>
+                    <td>
+                        <a href="{{ url_for('remove_from_cart', product_id=item.id) }}" class="btn-delete"><i class="fa fa-trash"></i> Hapus</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="cart-summary">
+        <div class="summary-box">
+            <h3>Ringkasan Belanja</h3>
+            <div class="summary-row">
+                <span>Total Item:</span>
+                <span>{{ cart_count }} barang</span>
+            </div>
+            <div class="summary-row total-row">
+                <span>Total Pembayaran:</span>
+                <span class="total-price">${{ "%.2f"|format(total_price) }}</span>
+            </div>
+            <a href="{{ url_for('checkout') }}" class="btn-checkout-large" style="display:block; text-align:center; text-decoration:none;">
+                Checkout <i class="fa fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <div class="empty-cart-message">
+        <i class="fa fa-folder-open" style="font-size: 48px; color: #ccc;"></i>
+        <p>Keranjang belanja Anda masih kosong.</p>
+        <a href="{{ url_for('shop') }}" class="btn btn-buy" style="display:inline-block; margin-top:15px; padding: 10px 20px;">Mulai Belanja</a>
+    </div>
+    {% endif %}
+
+    {% if recommendations %}
+    <section class="home-section" style="margin-top:40px;">
+        <div class="section-header">
+            <h2><i class="fa fa-wand-magic-sparkles section-icon icon-rec"></i> Produk Serupa Untukmu</h2>
+            <span class="rec-source">Rekomendasi model content-based</span>
+        </div>
+        {% from '_product_card.html' import product_card %}
+        <div class="products-grid home-grid">
+            {% for product in recommendations %}
+                {{ product_card(product) }}
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}

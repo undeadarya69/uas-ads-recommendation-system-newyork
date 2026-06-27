@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="main-container">
+    <div class="admin-header">
+        <h2><i class="fa fa-user-shield"></i> Dashboard Admin</h2>
+        <p>Kelola pengguna, produk, dan pesanan toko Stuffsus.</p>
+    </div>
+
+    <!-- Statistik -->
+    <div class="stats-grid">
+        <div class="stat-card"><i class="fa fa-users"></i><div><strong>{{ stats.total_users }}</strong><span>Total Akun</span></div></div>
+        <div class="stat-card"><i class="fa fa-store"></i><div><strong>{{ stats.total_sellers }}</strong><span>Seller</span></div></div>
+        <div class="stat-card"><i class="fa fa-boxes"></i><div><strong>{{ stats.total_products }}</strong><span>Produk</span></div></div>
+        <div class="stat-card"><i class="fa fa-receipt"></i><div><strong>{{ stats.total_orders }}</strong><span>Pesanan</span></div></div>
+        <div class="stat-card"><i class="fa fa-dollar-sign"></i><div><strong>${{ "%.2f"|format(stats.total_revenue) }}</strong><span>Pendapatan</span></div></div>
+    </div>
+
+    <!-- Kelola Pengguna -->
+    <div class="admin-table-list" style="margin-top:30px;">
+        <h3><i class="fa fa-users-cog"></i> Kelola Pengguna</h3>
+        <div class="table-scroll">
+            <table class="admin-table">
+                <thead>
+                    <tr><th>ID</th><th>Username</th><th>Nama</th><th>Email</th><th>Role</th><th>Aksi</th></tr>
+                </thead>
+                <tbody>
+                    {% for u in all_users %}
+                    <tr>
+                        <td>{{ u.id }}</td>
+                        <td><strong>{{ u.username }}</strong></td>
+                        <td>{{ u.full_name or '-' }}</td>
+                        <td>{{ u.email }}</td>
+                        <td>
+                            <form action="{{ url_for('admin_change_role', user_id=u.id) }}" method="POST" class="inline-form">
+                                <select name="role" onchange="this.form.submit()" {% if u.id == current_user.id %}disabled{% endif %}>
+                                    <option value="user" {% if u.role == 'user' %}selected{% endif %}>User</option>
+                                    <option value="seller" {% if u.role == 'seller' %}selected{% endif %}>Seller</option>
+                                    <option value="admin" {% if u.role == 'admin' %}selected{% endif %}>Admin</option>
+                                </select>
+                            </form>
+                        </td>
+                        <td>
+                            {% if u.id != current_user.id %}
+                            <a href="{{ url_for('admin_delete_user', user_id=u.id) }}" class="btn-delete-small" onclick="return confirm('Hapus akun {{ u.username }}?')"><i class="fa fa-trash"></i></a>
+                            {% else %}
+                            <span class="badge-normal">Anda</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Kelola Produk -->
+    <div class="admin-table-list" style="margin-top:30px;">
+        <h3><i class="fa fa-boxes"></i> Kelola Produk
+            <a href="{{ url_for('seller_dashboard') }}" class="btn-add-link"><i class="fa fa-plus"></i> Tambah Produk</a>
+        </h3>
+        <div class="table-scroll">
+            <table class="admin-table">
+                <thead>
+                    <tr><th>ID</th><th>Nama</th><th>Kategori</th><th>Harga</th><th>Diskon</th><th>Label</th><th>Seller</th><th>Aksi</th></tr>
+                </thead>
+                <tbody>
+                    {% for product in all_products %}
+                    <tr>
+                        <td>{{ product.id }}</td>
+                        <td><strong>{{ product.name }}</strong></td>
+                        <td><span class="tag-category">{{ product.category }}</span></td>
+                        <td>${{ "%.2f"|format(product.price) }}</td>
+                        <td>{% if product.discount_percent > 0 %}<span class="badge-rec">-{{ product.discount_percent }}%</span>{% else %}-{% endif %}</td>
+                        <td>
+                            {% if product.is_new_arrival %}<span class="mini-badge badge-new">New</span>{% endif %}
+                            {% if product.is_best_seller %}<span class="mini-badge badge-best">Best</span>{% endif %}
+                        </td>
+                        <td>{{ product.seller.username if product.seller else '-' }}</td>
+                        <td class="action-cell">
+                            <a href="{{ url_for('seller_edit_product', product_id=product.id) }}" class="btn-edit-small"><i class="fa fa-pen"></i></a>
+                            <a href="{{ url_for('seller_delete_product', product_id=product.id) }}" class="btn-delete-small" onclick="return confirm('Hapus produk ini?')"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Kelola Pesanan -->
+    <div class="admin-table-list" style="margin-top:30px;">
+        <h3><i class="fa fa-receipt"></i> Kelola Pesanan</h3>
+        <div class="table-scroll">
+            <table class="admin-table">
+                <thead>
+                    <tr><th>ID</th><th>Pembeli</th><th>Total</th><th>Pembayaran</th><th>Tanggal</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                    {% for order in all_orders %}
+                    <tr>
+                        <td>#{{ order.id }}</td>
+                        <td>{{ order.user.username if order.user else '-' }}</td>
+                        <td>${{ "%.2f"|format(order.total) }}</td>
+                        <td>{{ order.payment_label }}</td>
+                        <td>{{ order.created_at.strftime('%d %b %Y') }}</td>
+                        <td>
+                            <form action="{{ url_for('admin_update_order', order_id=order.id) }}" method="POST" class="inline-form">
+                                <select name="status" onchange="this.form.submit()">
+                                    {% for s in ['Diproses', 'Dikirim', 'Selesai', 'Dibatalkan'] %}
+                                    <option value="{{ s }}" {% if order.status == s %}selected{% endif %}>{{ s }}</option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="6" style="text-align:center; color:#999;">Belum ada pesanan.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

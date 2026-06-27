@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="main-container text-container">
+    <h2 class="section-title"><i class="fa fa-receipt"></i> Pesanan Saya</h2>
+
+    {% if orders %}
+    {% for order in orders %}
+    <div class="order-card">
+        <div class="order-header">
+            <div>
+                <strong>Pesanan #{{ order.id }}</strong>
+                <span class="order-date">{{ order.created_at.strftime('%d %b %Y, %H:%M') }}</span>
+            </div>
+            <span class="order-status status-{{ order.status|lower }}">{{ order.status }}</span>
+        </div>
+        <div class="order-body">
+            {% for item in order.items %}
+            <div class="order-item-row">
+                <span>{{ item.product_name }} <small>x{{ item.quantity }}</small></span>
+                <span>${{ "%.2f"|format(item.price * item.quantity) }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="order-footer">
+            <span><i class="fa fa-wallet"></i> {{ order.payment_label }}</span>
+            <strong>Total: ${{ "%.2f"|format(order.total) }}</strong>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="empty-cart-message">
+        <i class="fa fa-box-open" style="font-size: 48px; color: #ccc;"></i>
+        <p>Anda belum memiliki pesanan.</p>
+        <a href="{{ url_for('shop') }}" class="btn btn-buy" style="display:inline-block; margin-top:15px; padding: 10px 20px;">Mulai Belanja</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

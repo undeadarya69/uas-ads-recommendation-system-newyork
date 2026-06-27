@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="main-container text-container">
+    <h2 class="section-title"><i class="fa fa-credit-card"></i> Checkout & Pembayaran</h2>
+
+    <div class="checkout-layout">
+        <!-- Kiri: pilihan pembayaran + alamat -->
+        <div class="checkout-left">
+            <form action="{{ url_for('checkout_process') }}" method="POST" id="checkoutForm">
+                <div class="checkout-card">
+                    <h3><i class="fa fa-map-marker-alt"></i> Alamat Pengiriman</h3>
+                    {% if user.address %}
+                    <p class="address-text"><strong>{{ user.full_name or user.username }}</strong> {% if user.phone %}({{ user.phone }}){% endif %}<br>{{ user.address }}</p>
+                    {% else %}
+                    <p class="address-text address-empty">Alamat belum diisi. <a href="{{ url_for('profile') }}">Lengkapi di Profil &rarr;</a></p>
+                    {% endif %}
+                </div>
+
+                <div class="checkout-card">
+                    <h3><i class="fa fa-wallet"></i> Pilih Metode Pembayaran</h3>
+                    <div class="payment-options">
+                        {% for key, label, icon in payment_methods %}
+                        <label class="payment-option">
+                            <input type="radio" name="payment_method" value="{{ key }}" required>
+                            <span class="payment-box">
+                                <i class="fa {{ icon }}"></i> {{ label }}
+                            </span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-checkout-large">
+                    <i class="fa fa-lock"></i> Bayar Sekarang — ${{ "%.2f"|format(total_price) }}
+                </button>
+            </form>
+        </div>
+
+        <!-- Kanan: ringkasan pesanan -->
+        <div class="checkout-right">
+            <div class="summary-box">
+                <h3>Ringkasan Pesanan</h3>
+                {% for item in cart_items %}
+                <div class="checkout-item">
+                    <img src="{{ url_for('static', filename=item.image_url.lstrip('/')) }}" alt="{{ item.name }}">
+                    <div class="checkout-item-info">
+                        <span class="checkout-item-name">{{ item.name }}</span>
+                        <span class="checkout-item-qty">{{ item.quantity }} x ${{ "%.2f"|format(item.price) }}</span>
+                    </div>
+                    <span class="checkout-item-subtotal">${{ "%.2f"|format(item.subtotal) }}</span>
+                </div>
+                {% endfor %}
+                <div class="summary-row total-row">
+                    <span>Total:</span>
+                    <span class="total-price">${{ "%.2f"|format(total_price) }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

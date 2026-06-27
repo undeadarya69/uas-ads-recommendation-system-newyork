@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="main-container text-container">
+    <h2 class="section-title"><i class="fa fa-user"></i> Profil Saya</h2>
+
+    <div class="profile-layout">
+        <div class="profile-side">
+            <div class="profile-card-side">
+                <img src="{{ url_for('static', filename=user.avatar_url.lstrip('/')) }}" alt="avatar" class="profile-avatar">
+                <h3>{{ user.full_name or user.username }}</h3>
+                <p class="profile-username">@{{ user.username }}</p>
+                <span class="role-tag role-{{ user.role }}">{{ user.role|upper }}</span>
+                <div class="profile-meta">
+                    <p><i class="fa fa-envelope"></i> {{ user.email }}</p>
+                    <p><i class="fa fa-phone"></i> {{ user.phone or '-' }}</p>
+                    <p><i class="fa fa-map-marker-alt"></i> {{ user.address or 'Alamat belum diisi' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-main">
+            <div class="checkout-card">
+                <h3><i class="fa fa-edit"></i> Edit Data Pribadi</h3>
+                <form method="POST" class="styled-form">
+                    <div class="form-group">
+                        <label>Nama Lengkap</label>
+                        <input type="text" name="full_name" value="{{ user.full_name }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" value="{{ user.email }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>No. Telepon</label>
+                        <input type="tel" name="phone" id="phoneInput" value="{{ user.phone }}"
+                               placeholder="08xxxxxxxxxx" inputmode="numeric" pattern="[0-9]*"
+                               maxlength="15" title="Nomor telepon hanya boleh berisi angka"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    </div>
+                    <div class="form-group">
+                        <label>Alamat</label>
+                        <textarea name="address" rows="3" placeholder="Alamat lengkap untuk pengiriman">{{ user.address }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>URL Foto Profil</label>
+                        <input type="text" name="avatar_url" value="{{ user.avatar_url }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Password Baru (kosongkan jika tidak diubah)</label>
+                        <input type="password" name="new_password" placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn-admin-submit"><i class="fa fa-save"></i> Simpan Perubahan</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const phone = document.getElementById('phoneInput');
+        if (!phone) return;
+
+        // Cegah karakter selain angka saat mengetik (selain tombol navigasi)
+        phone.addEventListener('keydown', function (e) {
+            const allowed = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter',
+                             'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+            if (allowed.includes(e.key) || e.ctrlKey || e.metaKey) return;
+            if (!/^[0-9]$/.test(e.key)) {
+                e.preventDefault();
+            }
+        });
+
+        // Bersihkan teks yang ditempel (paste) agar hanya berisi angka
+        phone.addEventListener('paste', function (e) {
+            e.preventDefault();
+            const text = (e.clipboardData || window.clipboardData).getData('text');
+            const digits = text.replace(/[^0-9]/g, '');
+            document.execCommand('insertText', false, digits);
+        });
+    })();
+</script>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% from '_product_card.html' import product_card %}
+{% block content %}
+<div class="hero-banner">
+    <h1>Welcome to Stuffsus</h1>
+    <p class="hero-subtitle">Temukan barang kebutuhanmu — New Arrival, Best Seller, dan Diskon spesial setiap hari!</p>
+    <a href="{{ url_for('shop') }}" class="btn-hero">Belanja Sekarang <i class="fa fa-arrow-right"></i></a>
+</div>
+
+<div class="main-container">
+    <!-- New Arrival -->
+    <section class="home-section">
+        <div class="section-header">
+            <h2><i class="fa fa-bolt section-icon icon-new"></i> New Arrival</h2>
+            <a href="{{ url_for('shop', filter='new_arrival') }}" class="see-all-link">Lihat Semua &rarr;</a>
+        </div>
+        <div class="products-grid home-grid">
+            {% for product in new_arrivals %}
+                {{ product_card(product) }}
+            {% else %}
+            <p class="no-products">Belum ada produk new arrival.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Best Seller -->
+    <section class="home-section">
+        <div class="section-header">
+            <h2><i class="fa fa-fire section-icon icon-best"></i> Best Seller</h2>
+            <a href="{{ url_for('shop', filter='best_seller') }}" class="see-all-link">Lihat Semua &rarr;</a>
+        </div>
+        <div class="products-grid home-grid">
+            {% for product in best_sellers %}
+                {{ product_card(product) }}
+            {% else %}
+            <p class="no-products">Belum ada produk best seller.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- On Discount -->
+    <section class="home-section">
+        <div class="section-header">
+            <h2><i class="fa fa-tags section-icon icon-discount"></i> On Discount</h2>
+            <a href="{{ url_for('shop', filter='on_discount') }}" class="see-all-link">Lihat Semua &rarr;</a>
+        </div>
+        <div class="products-grid home-grid">
+            {% for product in on_discount %}
+                {{ product_card(product) }}
+            {% else %}
+            <p class="no-products">Belum ada produk diskon.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    {% if recommendations %}
+    <!-- Rekomendasi dari model content-based -->
+    <section class="home-section">
+        <div class="section-header">
+            <h2><i class="fa fa-wand-magic-sparkles section-icon icon-rec"></i> Rekomendasi Untukmu</h2>
+            <span class="rec-source">Berdasarkan isi keranjangmu (model content-based)</span>
+        </div>
+        <div class="products-grid home-grid">
+            {% for product in recommendations %}
+                {{ product_card(product) }}
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Call to Action Banner -->
+    <div class="cta-banner">
+        <div class="cta-left">
+            <h2>Ready to Get<br>Our New Stuff?</h2>
+            <form class="cta-form">
+                <input type="email" placeholder="Your Email">
+                <button type="button">Send</button>
+            </form>
+        </div>
+        <div class="cta-right">
+            <h4>Stuffsus for Homes and Needs</h4>
+            <p>We'll listen to your needs, identify the best approach, and then create a bespoke solution that's right for you.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

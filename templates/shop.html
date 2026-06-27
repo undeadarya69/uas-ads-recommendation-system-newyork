@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% from '_product_card.html' import product_card %}
+
+{% block content %}
+<div class="hero-banner hero-shop">
+    <h1>Shop</h1>
+</div>
+
+<div class="main-container">
+    <div class="search-bar-container">
+        <h2>Give All You Need</h2>
+        <form action="{{ url_for('shop') }}" method="GET" class="main-search">
+            <input type="text" name="search" placeholder="Search on Stuffsus" value="{{ search_query }}">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="shop-layout">
+        <aside class="sidebar">
+            <h3>Category</h3>
+            <ul class="category-list">
+                <li>
+                    <a href="{{ url_for('shop', **current_args) }}" class="{% if not active_kategori and not active_filter %}active{% endif %}">
+                        <i class="fa fa-boxes"></i> All Product <span class="badge">{{ total_products }}</span>
+                    </a>
+                </li>
+
+                {% for kat in all_kategori %}
+                <li>
+                    <a href="{{ url_for('shop', kategori=kat.id, **current_args) }}" class="{% if active_kategori and active_kategori.id == kat.id %}active{% endif %}">
+                        <i class="fa fa-tag"></i> {{ kat.nama_kategori }} <span class="badge">{{ kat.product_count }}</span>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <h3 style="margin-top:25px;">Filter Spesial</h3>
+            <div class="sidebar-filters">
+                <a href="{{ url_for('shop', filter='new_arrival', **current_args) }}" class="filter-group filter-link {% if active_filter == 'new_arrival' %}active{% endif %}">
+                    <span><i class="fa fa-bolt"></i> New Arrival</span> <i class="fa fa-chevron-right"></i>
+                </a>
+
+                <a href="{{ url_for('shop', filter='best_seller', **current_args) }}" class="filter-group filter-link {% if active_filter == 'best_seller' %}active{% endif %}">
+                    <span><i class="fa fa-fire"></i> Best Seller</span> <i class="fa fa-chevron-right"></i>
+                </a>
+
+                <a href="{{ url_for('shop', filter='on_discount', **current_args) }}" class="filter-group filter-link {% if active_filter == 'on_discount' %}active{% endif %}">
+                    <span><i class="fa fa-tags"></i> On Discount</span> <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+        </aside>
+
+        <section class="products-section">
+            <div class="active-filter-info">
+                Menampilkan <strong>{{ products|length }}</strong> dari <strong>{{ pagination.total }}</strong> produk
+
+                {% if active_kategori %}
+                    — kategori <strong>{{ active_kategori.nama_kategori }}</strong>
+                {% endif %}
+
+                {% if active_filter %}
+                    — filter
+                    <strong>
+                        {% if active_filter == 'new_arrival' %}
+                            New Arrival
+                        {% elif active_filter == 'best_seller' %}
+                            Best Seller
+                        {% else %}
+                            On Discount
+                        {% endif %}
+                    </strong>
+                {% endif %}
+
+                {% if active_kategori or active_filter or search_query %}
+                    <a href="{{ url_for('shop') }}" class="clear-filter">&times; Reset</a>
+                {% endif %}
+            </div>
+
+            <div class="products-grid">
+                {% for product in products %}
+                    {{ product_card(product) }}
+                {% else %}
+                    <p class="no-products">Tidak ada produk ditemukan.</p>
+                {% endfor %}
+            </div>
+
+            {% if recommendations %}
+            <div class="active-filter-info" style="margin-top: 35px;">
+                <strong>Rekomendasi Produk untuk "{{ search_query }}"</strong>
+            </div>
+
+            <div class="products-grid">
+                {% for product in recommendations %}
+                    {{ product_card(product) }}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if pagination.pages > 1 %}
+            <div class="pagination">
+                <div>
+                    {% if pagination.has_prev %}
+                        <a href="{{ url_for('shop', page=pagination.prev_num, **current_args) }}">&laquo; Sebelumnya</a>
+                    {% endif %}
+                </div>
+
+                <div class="pages">
+                    {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+                        {% if page_num %}
+                            {% if page_num == pagination.page %}
+                                <a href="#" class="active">{{ page_num }}</a>
+                            {% else %}
+                                <a href="{{ url_for('shop', page=page_num, **current_args) }}">{{ page_num }}</a>
+                            {% endif %}
+                        {% else %}
+                            <span>...</span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div>
+                    {% if pagination.has_next %}
+                        <a href="{{ url_for('shop', page=pagination.next_num, **current_args) }}">Selanjutnya &raquo;</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </section>
+    </div>
+</div>
+{% endblock %}

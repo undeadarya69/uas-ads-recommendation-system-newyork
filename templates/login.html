@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="main-container">
+    <div class="auth-card">
+        <h2><i class="fa fa-sign-in-alt"></i> Login</h2>
+        <p class="auth-subtitle">Masuk untuk mulai berbelanja di Stuffsus</p>
+        <form method="POST" class="styled-form">
+            <div class="form-group">
+                <label>Username atau Email</label>
+                <input type="text" name="username" placeholder="username / email" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-admin-submit">Login</button>
+        </form>
+        <p class="auth-switch">Belum punya akun? <a href="{{ url_for('register') }}">Daftar di sini</a></p>
+        <div class="demo-accounts">
+            <p><strong>Akun demo:</strong></p>
+            <p>Admin: <code>admin / admin123</code></p>
+            <p>Seller: <code>seller / seller123</code></p>
+            <p>User: <code>user / user123</code></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
