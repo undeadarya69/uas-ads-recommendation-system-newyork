@@ -191,40 +191,8 @@ Hasil evaluasi menunjukkan bahwa sistem mampu menghasilkan rekomendasi produk ya
 
 ---
 
-#  Struktur Proyek
 
-```
-stuffsus-recommendation-system
-│
-├── data/
-│   └── Dataset Retail New York
-│
-├── model/
-│   └── content_based_model_ads_versi7.joblib
-│
-├── static/
-│   ├── css/
-│   ├── js/
-│   └── images/
-│
-├── templates/
-│   ├── base.html
-│   ├── shop.html
-│   ├── login.html
-│   ├── admin.html
-│   └── ...
-│
-├── app.py
-├── recommender.py
-├── fix_image_url.py
-├── requirements.txt
-├── uas_model_rekomen.ipynb
-└── README.md
-```
-
----
-
-# ⚙️ Cara Menjalankan Aplikasi
+#  Cara Menjalankan Aplikasi
 
 ### 1. Clone Repository
 
@@ -275,9 +243,9 @@ Aplikasi Stuffsus menyediakan beberapa fitur utama, antara lain:
 
 ---
 
-# Pengembang
+# Nama dan Identitas
 
-**Nyoman Arya Kristian Penny Karna Jaya**
+**Nyoman Arya Kristian Penny Karna Jaya / 5241811013**
 
 Program Studi Sains Data
 
